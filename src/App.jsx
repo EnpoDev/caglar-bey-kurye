@@ -11,10 +11,10 @@ function App() {
         <div className="p-4 border-b border-gray-200">
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-orange-500 rounded flex items-center justify-center text-white font-semibold text-sm">
-              IF
+              SL
             </div>
             <div>
-              <h1 className="text-sm font-semibold text-gray-900">Irmak Fırın & Cafe</h1>
+              <h1 className="text-sm font-semibold text-gray-900">Sefer x Logistics</h1>
               <p className="text-xs text-blue-600">İşletme</p>
             </div>
           </div>
@@ -99,9 +99,9 @@ function App() {
           <div className="flex items-center justify-between px-3 py-2">
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-xs font-semibold text-gray-700">
-                MH
+                TK
               </div>
-              <span className="text-sm text-gray-700">Muhammet Hüseyin Koçaş</span>
+              <span className="text-sm text-gray-700">Taner Kahraman</span>
             </div>
             <button className="p-1 hover:bg-gray-100 rounded">
               <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
