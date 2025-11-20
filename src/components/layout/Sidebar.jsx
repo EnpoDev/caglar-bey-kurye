@@ -1,15 +1,17 @@
 import { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '../../contexts/ThemeContext';
 import Input from '../ui/Input';
 
 export default function Sidebar() {
   const { theme, toggleTheme } = useTheme();
+  const location = useLocation();
 
   return (
     <aside className="w-64 bg-card border-r border-border flex flex-col">
       {/* Logo */}
       <div className="p-4 border-b border-border">
-        <div className="flex items-center space-x-2">
+        <Link to="/" className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-primary rounded flex items-center justify-center text-primary-foreground font-semibold text-sm">
             CB
           </div>
@@ -17,7 +19,7 @@ export default function Sidebar() {
             <h1 className="text-sm font-semibold text-foreground">Çağlar Bey Kurye</h1>
             <p className="text-xs text-primary">İşletme</p>
           </div>
-        </div>
+        </Link>
       </div>
 
       {/* Search Bar */}
@@ -70,26 +72,38 @@ export default function Sidebar() {
 
       {/* Navigation Menu */}
       <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
-        <NavItem icon="map" label="Harita" active />
-        <NavItemDropdown icon="orders" label="Sipariş Yönetimi" defaultOpen>
-          <NavSubItem label="Sipariş" />
-          <NavSubItem label="Geçmiş" />
-          <NavSubItem label="İptal Edilenler" />
-          <NavSubItem label="İstatistik" />
+        <NavItem to="/harita" label="Harita" currentPath={location.pathname} />
+        <NavItemDropdown
+          label="Sipariş Yönetimi"
+          defaultOpen={location.pathname.startsWith('/siparis')}
+        >
+          <NavSubItem to="/siparis/aktif" label="Aktif Siparişler" currentPath={location.pathname} />
+          <NavSubItem to="/siparis/gecmis" label="Geçmiş" currentPath={location.pathname} />
+          <NavSubItem to="/siparis/iptal" label="İptal Edilenler" currentPath={location.pathname} />
+          <NavSubItem to="/siparis/istatistik" label="İstatistik" currentPath={location.pathname} />
         </NavItemDropdown>
-        <NavItem icon="stats" label="Gelişmiş İstatistik" />
-        <NavItemDropdown icon="settings" label="Yönetim">
-          <NavSubItem label="Kullanıcılar" />
-          <NavSubItem label="Roller" />
+        <NavItem to="/gelismis-istatistik" label="Gelişmiş İstatistik" currentPath={location.pathname} />
+        <NavItemDropdown
+          label="Yönetim"
+          defaultOpen={location.pathname.startsWith('/yonetim')}
+        >
+          <NavSubItem to="/yonetim/kullanicilar" label="Kullanıcılar" currentPath={location.pathname} />
+          <NavSubItem to="/yonetim/roller" label="Roller" currentPath={location.pathname} />
         </NavItemDropdown>
-        <NavItem icon="menu" label="Menü Yönetimi" />
-        <NavItemDropdown icon="business" label="İşletmem">
-          <NavSubItem label="İşletme Bilgileri" />
-          <NavSubItem label="Şubeler" />
+        <NavItem to="/menu" label="Menü Yönetimi" currentPath={location.pathname} />
+        <NavItemDropdown
+          label="İşletmem"
+          defaultOpen={location.pathname.startsWith('/isletmem')}
+        >
+          <NavSubItem to="/isletmem/bilgiler" label="İşletme Bilgileri" currentPath={location.pathname} />
+          <NavSubItem to="/isletmem/subeler" label="Şubeler" currentPath={location.pathname} />
         </NavItemDropdown>
-        <NavItemDropdown icon="account" label="Hesap Ayarları">
-          <NavSubItem label="Profil" />
-          <NavSubItem label="Güvenlik" />
+        <NavItemDropdown
+          label="Hesap Ayarları"
+          defaultOpen={location.pathname.startsWith('/hesap')}
+        >
+          <NavSubItem to="/hesap/profil" label="Profil" currentPath={location.pathname} />
+          <NavSubItem to="/hesap/guvenlik" label="Güvenlik" currentPath={location.pathname} />
         </NavItemDropdown>
       </nav>
 
@@ -125,18 +139,22 @@ export default function Sidebar() {
   );
 }
 
-function NavItem({ icon, label, active = false }) {
+function NavItem({ to, label, currentPath }) {
+  const isActive = currentPath === to;
   return (
-    <button className={`w-full text-left px-3 py-2 text-sm rounded transition-colors flex items-center space-x-2 ${
-      active ? 'bg-accent text-accent-foreground' : 'text-foreground hover:bg-accent'
-    }`}>
+    <Link
+      to={to}
+      className={`w-full text-left px-3 py-2 text-sm rounded transition-colors flex items-center space-x-2 ${
+        isActive ? 'bg-accent text-accent-foreground' : 'text-foreground hover:bg-accent'
+      }`}
+    >
       <div className="w-4 h-4 rounded bg-muted"></div>
       <span>{label}</span>
-    </button>
+    </Link>
   );
 }
 
-function NavItemDropdown({ icon, label, children, defaultOpen = false }) {
+function NavItemDropdown({ label, children, defaultOpen = false }) {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
@@ -163,10 +181,18 @@ function NavItemDropdown({ icon, label, children, defaultOpen = false }) {
   );
 }
 
-function NavSubItem({ label }) {
+function NavSubItem({ to, label, currentPath }) {
+  const isActive = currentPath === to;
   return (
-    <button className="w-full text-left px-3 py-1.5 text-sm text-muted-foreground hover:bg-accent hover:text-foreground rounded transition-colors">
+    <Link
+      to={to}
+      className={`block w-full text-left px-3 py-1.5 text-sm rounded transition-colors ${
+        isActive
+          ? 'bg-accent text-foreground font-medium'
+          : 'text-muted-foreground hover:bg-accent hover:text-foreground'
+      }`}
+    >
       {label}
-    </button>
+    </Link>
   );
 }
